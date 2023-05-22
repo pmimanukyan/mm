@@ -15,36 +15,6 @@ class FodraStrategy:
     def __init__(self, sim: Sim, a: float, mu: float, eta: float, gamma: float, k: float, sigma: float,
                  terminal_time: bool, adjust_delay: int, order_size: float,
                  min_order_size: float, precision: int):
-        """
-        Args:
-            sim:
-                Exchange simulator.
-            gamma:
-                Parameter γ from (29), (30) in [Stoikov 2008]. Assumed to be
-                non-negative. Small values correspond to more risk neutral
-                strategy, larger values correspond to more risk averse strategy.
-            k:
-                Parameter k from (30) in [Stoikov 2008]. A statistic that is
-                calculated from the market data.
-            sigma:
-                Parameter σ from (29) in [Stoikov 2008]. A standard deviation
-                of increments of the Wiener process that is assumed to be the
-                model for the asset price.
-            terminal_time:
-                Whether the terminal time T exists or not. If `True`, terminal
-                time is the timestamp of the last element in simulator market
-                data queue. If `False`, the term (T-t) is set to 1.
-            adjust_delay:
-                Delay (in nanoseconds) between readjusting the orders.
-            order_size:
-                Size of limit orders placed by the strategy.
-            min_order_size:
-                Minimum order size for the base asset allowed by exchange. E.g.
-                0.001 BTC for Binance BTC/USDT Perpetual Futures as of 2022-11-29.
-            precision:
-                Precision of the price - a number of decimal places. E.g. 2 for
-                Binance BTC/USDT Perpetual Futures as of 2022-11-29.
-        """
         self.a = a
         self.mu = mu
         self.eta = eta
@@ -138,7 +108,6 @@ class FodraStrategy:
                 if central_price is None:
                     break
 
-                # calculate optimal spread, (30) from [Stoikov 2008]
                 spread = 2 / self.gamma * math.log(1 + self.gamma / self.k) + 2 * self.eta + self.gamma * self.sigma**2 * (1 - math.exp(-2 * self.a * self.T_minus_t)) / (2 * self.a)
 
                 price_bid = round(central_price - spread / 2, self.precision)
@@ -151,7 +120,6 @@ class FodraStrategy:
     def get_central_price(self):
         """Calculates price level around which we place our maker orders"""
         midprice = (self.best_bid + self.best_ask) / 2
-        # indifference price, (29) from [Stoikov 2008]
         indiff_price = midprice * math.exp(-self.a * self.T_minus_t) + self.mu * (1 - math.exp(-self.a * self.T_minus_t)) - self.cur_pos / self.min_order_size * (2 * self.eta + self.gamma * self.sigma**2 * self.T_minus_t * (1 - math.exp(-2 * self.a * self.T_minus_t) / (2 * self.a)))
         return indiff_price
 

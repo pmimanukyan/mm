@@ -243,7 +243,7 @@ class Sim:
         pass
     
 
-    
+
     def cancel_order(self, ts:float, id_to_delete:int) -> CancelOrder:
         #добавляем заявку на удаление
         ts += self.latency
