@@ -6,7 +6,7 @@ import numpy as np
 from sortedcontainers import SortedDict
 
 from utils import Order, CancelOrder, AnonTrade, OwnTrade, OrderbookSnapshotUpdate, MarketOrder, \
-                  MdUpdate, update_best_positions, get_mid_price, PriorQueue
+                  MdUpdate, update_best_positions, update_positions, get_mid_price, PriorQueue
 
 
 class Sim:

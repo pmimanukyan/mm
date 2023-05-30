@@ -87,6 +87,19 @@ def update_best_positions(best_bid:float, best_ask:float, md:MdUpdate) -> Tuple[
     assert best_ask > best_bid, "wrong best positions"
     return best_bid, best_ask
 
+def update_positions(asks:list, bids:list, md:MdUpdate) -> Tuple[float, float]:
+    if not md.orderbook is None:
+        asks = md.orderbook.asks
+        bids = md.orderbook.bids
+    # elif not md.trade is None:
+    #     if md.trade.side == 'BID':
+    #         best_ask = max(md.trade.price, best_ask)
+    #     elif md.trade.side == 'ASK':
+    #         best_bid = min(best_bid, md.trade.price)
+    #     else:
+    #         assert False, "WRONG TRADE SIDE"
+    # assert best_ask > best_bid, "wrong best positions"
+    return asks, bids
 
 def get_mid_price(mid_price:float, md:MdUpdate):
     book = md.orderbook
