@@ -4,7 +4,7 @@ Repo for HFT project in CMF
 ## Quick start:
 Load data using `load_md_from_file` function:
 ```
-md = load_md_from_file(path=PATH_TO_FILE, nrows=NROWS)
+md = load_md_from_file(path=PATH_TO_FILE, T=T)
 ```
 Specify simulation latency and md_latency in nanoseconds:
 ```
